@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Yola's Birthday Times - Special Edition</title>
+    <style>
+        /* FONT & WARNA */
+        :root {
+            --paper-color: #f4f4f4;
+            --ink-color: #111;
+            --accent-color: #800000;
+        }
+
+        body {
+            background-color: #dcdcdc;
+            font-family: 'Times New Roman', Times, serif;
+            color: var(--ink-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background-color: var(--paper-color);
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            border: 1px solid #ccc;
+            position: relative;
+        }
+
+        /* HEADER */
+        header {
+            text-align: center;
+            border-bottom: 3px double var(--ink-color);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            text-transform: uppercase;
+            margin: 0;
+            letter-spacing: -1px;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .meta {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid var(--ink-color);
+            border-bottom: 1px solid var(--ink-color);
+            padding: 5px 0;
+            margin-top: 10px;
+            font-style: italic;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        /* AUDIO */
+        .audio-container {
+            width: 100%;
+            margin-bottom: 20px;
+            text-align: center;
+            background: #eee;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+        
+        audio {
+            width: 100%;
+            height: 30px;
+        }
+
+        /* BERITA */
+        .headline {
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-align: left;
+            line-height: 1.1;
+            margin-bottom: 10px;
+        }
+
+        .lead-text {
+            font-size: 1.2rem;
+            font-style: italic;
+            margin-bottom: 20px;
+            color: #444;
+            border-left: 4px solid var(--accent-color);
+            padding-left: 15px;
+        }
+
+        /* KOLOM FOTO */
+        .columns {
+            column-count: 2;
+            column-gap: 20px;
+            text-align: justify;
+        }
+        
+        @media (max-width: 600px) {
+            .columns { column-count: 1; }
+            h1 { font-size: 2.5rem; }
+            .headline { font-size: 2rem; }
+        }
+
+        p {
+            font-size: 1.05rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        img {
+            width: 100%;
+            height: auto;
+            filter: grayscale(100%) contrast(120%);
+            margin-bottom: 5px;
+            border: 1px solid #333;
+            display: block;
+        }
+
+        .photo-caption {
+            font-size: 0.8rem;
+            font-style: italic;
+            margin-bottom: 15px;
+            display: block;
+            text-align: left;
+        }
+
+        /* --- TOMBOL REVISI (AESTHETIC STYLE) --- */
+        .btn-action {
+            display: block;
+            width: 100%;
+            padding: 15px 0;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            background: transparent;
+            color: var(--ink-color);
+            border: none;
+            border-top: 4px double var(--ink-color);
+            border-bottom: 4px double var(--ink-color);
+            font-family: 'Times New Roman', serif;
+            font-weight: bold;
+            font-size: 1.4rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-action:hover {
+            letter-spacing: 4px;
+            background-color: rgba(0,0,0,0.05);
+        }
+
+        /* --- FITUR KUE (POPUP) --- */
+        #cake-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--paper-color);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 999;
+            color: var(--ink-color);
+            border: 10px solid #dcdcdc;
+        }
+
+        .cake-container {
+            position: relative;
+            width: 250px;
+            height: 200px;
+            margin-top: 50px;
+        }
+
+        .cake-body {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 100px;
+            background: #f8b195;
+            border-radius: 10px 10px 0 0;
+            border: 2px solid #333;
+        }
+
+        .cake-body::before {
+            content: "";
+            position: absolute;
+            top: -2px; left: -2px; width: calc(100% + 4px); height: 25px;
+            background: #c06c84;
+            border-radius: 12px 12px 0 0;
+            background-image: radial-gradient(circle at 10px 15px, #c06c84 12px, transparent 13px);
+            background-size: 20px 30px;
+            background-repeat: repeat-x;
+            border-bottom: 2px solid #333;
+        }
+
+        .candle {
+            position: absolute;
+            bottom: 100px; left: 50%; transform: translateX(-50%);
+            width: 20px; height: 80px;
+            background: repeating-linear-gradient(45deg, #fff, #fff 10px, #355c7d 10px, #355c7d 20px);
+            border-radius: 3px;
+            border: 1px solid #333;
+        }
+
+        .flame {
+            position: absolute;
+            top: -25px; left: 50%; transform: translateX(-50%);
+            width: 20px; height: 30px;
+            background: #ffdb58;
+            border-radius: 50% 50% 20% 20%;
+            box-shadow: 0 0 10px orange, 0 0 20px orange;
+            animation: flicker 0.5s infinite alternate;
+            cursor: pointer;
+            z-index: 10;
+            border: 1px solid #e6a800;
+        }
+
+        .flame::after {
+            content: "";
+            position: absolute;
+            bottom: -5px; left: 50%; transform: translateX(-50%);
+            width: 4px; height: 10px; background: black;
+        }
+
+        @keyframes flicker {
+            0% { transform: translateX(-50%) scale(1); opacity: 1; }
+            100% { transform: translateX(-50%) scale(0.9); opacity: 0.8; }
+        }
+
+        .smoke {
+            position: absolute;
+            top: -30px; left: 50%; transform: translateX(-50%);
+            width: 15px; height: 15px;
+            background: #555;
+            border-radius: 50%;
+            opacity: 0;
+            animation: rise 1s ease-out forwards;
+        }
+
+        @keyframes rise {
+            0% { opacity: 0.6; top: -30px; }
+            100% { opacity: 0; top: -90px; transform: translateX(-60%) scale(3); }
+        }
+
+        .hidden { display: none !important; }
+
+        .birthday-message {
+            margin-top: 50px; text-align: center; opacity: 0; transition: opacity 2s;
+        }
+        .birthday-message.show { opacity: 1; }
+
+        .birthday-message h1 { color: var(--accent-color); font-size: 3rem; }
+
+        .instruction {
+            margin-top: 30px; font-size: 1rem; color: #555; font-style: italic;
+            animation: blink 2s infinite;
+        }
+        @keyframes blink { 50% { opacity: 0.5; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>THE DAILY AFDHI'S</h1>
+        <div class="meta">
+            <span>VOL. 1 - BIRTHDAY EDITION</span>
+            <span id="date"></span>
+            <span>HARGA: SEPENUH HATIKU</span>
+        </div>
+    </header>
+
+    <div class="audio-container">
+        <p style="margin: 0 0 5px 0; font-size: 0.8rem; font-weight: bold;">[NOW PLAYING: DI AKHIR PERANG - NADIN AMIZAH]</p>
+        <audio controls>
+            <source src="lagu.mp3" type="audio/mpeg">
+            Browser kamu tidak support audio, sayang.
+        </audio>
+    </div>
+
+    <div class="headline">SEORANG MANUSIA FAVORIT RESMI BERTAMBAH USIA HARI INI</div>
+    <div class="lead-text">
+        "Perang Melawan Kesepian Telah Berakhir. Laporan Menunjukkan Tingkat Kebahagiaan Mencapai Puncak Tertinggi Sejak Kehadiran Subjek."
+    </div>
+
+    <img src="foto1.jpg" alt="Foto Utama">
+    <span class="photo-caption">Gbr 1. Sosok yang merayakan ulang tahun, sekaligus pemenang hati.</span>
+
+    <div class="columns">
+        <p><strong>MAJALENGKA</strong> - Hari ini dikonfirmasi sebagai hari libur nasional di hatiku. Tepat pada tanggal 21 Maret, semesta menurunkan satu sosok yang mengubah definisi "pulang".</p>
+        
+        <p>Seperti lirik lagu yang sedang diputar di atas, kehadiranmu adalah akhir dari perang panjangku. Kamu adalah gencatan senjata paling indah yang pernah kutemui selama 19 tahun hidupku.</p>
+
+        <img src="foto2.jpg" alt="Foto 2">
+        <span class="photo-caption">Gbr 2. Bukti otentik momen bahagia.</span>
+
+        <p>Investigasi mendalam menunjukkan bahwa senyummu memiliki efek radiasi positif yang berbahaya bagi kesehatan jantungku. Namun, ini adalah risiko yang dengan senang hati aku ambil setiap hari.</p>
+
+        <img src="foto3.jpg" alt="Foto 3">
+        <span class="photo-caption">Gbr 3. Arsip kenangan manis.</span>
+
+        <p>Dokumen ini dibuat sebagai tanda bukti sah kepemilikan cinta yang tak terbatas. Tidak ada tanggal kadaluarsa. Tidak ada syarat dan ketentuan tersembunyi.</p>
+
+        <img src="foto4.jpg" alt="Foto 4">
+        <span class="photo-caption">Gbr 4. Bandung bersamamu.</span>
+        <p>Bandung menjadi lebih istimewa karena aku mendatanginya dengan mu, wanita yang kucintai. Hari yang sangat indah dan akan menjadi sejarah bagiku atas hari yang telah kita ciptakan bersama, disini.</p>
+        
+        <img src="foto5.jpg" alt="Foto 5">
+        <span class="photo-caption">Gbr 5. Kita.</span>
+        <p>Aku juga akan memperjuangkanmu, layaknya kamu menggapai hatiku tempo dulu sehingga kamu dan aku saat ini telah menjadi kita separuh proses. Selamat Ulang Tahun Yolanda Marsya Utami.</p>
+    </div>
+
+    <button class="btn-action" onclick="openCake()">
+        KLIK UNTUK TIUP LILIN VIRTUAL 🎂
+    </button>
+</div>
+
+<div id="cake-overlay">
+    <h2 style="font-family: 'Times New Roman'; margin-bottom: 20px; font-size: 2rem; letter-spacing: 2px;">MAKE A WISH</h2>
+    
+    <div class="cake-container">
+        <div class="candle">
+            <div class="flame" id="flame" onclick="blowCandle()"></div>
+            <div class="smoke" id="smoke"></div>
+        </div>
+        <div class="cake-body"></div>
+    </div>
+
+    <div class="instruction" id="instruction-text">
+        (Sentuh Api Untuk Meniupnya)
+    </div>
+
+    <div class="birthday-message" id="message">
+        <h1>YEAYYY! 🎉</h1>
+        <p style="font-size: 1.5rem; font-style: italic;">Semoga semua doamu terkabul.<br>I Love You, Mainn.</p>
+        <br>
+        <a href="#" onclick="closeCake()" style="color: var(--ink-color); text-decoration: underline; font-weight: bold;">[ Tutup Halaman Ini ]</a>
+    </div>
+</div>
+
+<script>
+    // Set Tanggal Manual sesuai request kamu
+    document.getElementById('date').innerHTML = "Sabtu, 21 Maret 2026"; 
+
+    function openCake() {
+        document.getElementById('cake-overlay').style.display = 'flex';
+    }
+
+    function blowCandle() {
+        const flame = document.getElementById('flame');
+        const smoke = document.getElementById('smoke');
+        const message = document.getElementById('message');
+        const instruction = document.getElementById('instruction-text');
+
+        flame.classList.add('hidden');
+        
+        smoke.style.display = 'block';
+        smoke.style.animation = 'none';
+        smoke.offsetHeight; 
+        smoke.style.animation = null; 
+
+        instruction.style.display = 'none';
+
+        setTimeout(() => {
+            message.classList.add('show');
+        }, 500);
+    }
+
+    function closeCake() {
+        document.getElementById('cake-overlay').style.display = 'none';
+    }
+</script>
+
+</body>
+</html>
